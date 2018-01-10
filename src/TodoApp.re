@@ -12,10 +12,11 @@ type state = {
 
 let component = ReasonReact.reducerComponent("Page");
 
-let updateIn = (updateFn, arr, valToUpdate) => Array.map(
+let updateIn = (valToUpdate, newVal, arr) => Array.map(
   (curVal) => curVal === valToUpdate
-    ? updateFn(curVal)
-    : curVal
+    ? newVal
+    : curVal,
+  arr
 );
 
 let make = (_children) => {
@@ -29,13 +30,12 @@ let make = (_children) => {
     | Change(value) => ReasonReact.Update({...state, newTodo: value})
     | Toggle(todoToToggle) => ReasonReact.Update({
       ...state,
-      todos: Array.map(
-        (curTodo) => curTodo === todoToToggle
-          ? TodoItem.{
-            text: curTodo.text,
-            isChecked: ! curTodo.isChecked
-          }
-          : curTodo,
+      todos: updateIn(
+        todoToToggle,
+        TodoItem.{
+          ...todoToToggle,
+          isChecked: ! todoToToggle.isChecked
+        },
         state.todos
       )
     })

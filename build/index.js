@@ -30070,17 +30070,15 @@ function str(prim) {
 
 var component = ReasonReact.reducerComponent("Page");
 
-function updateIn(updateFn, _, valToUpdate) {
-  return (function (param) {
-      return $$Array.map((function (curVal) {
-                    var match = +(curVal === valToUpdate);
-                    if (match !== 0) {
-                      return Curry._1(updateFn, curVal);
-                    } else {
-                      return curVal;
-                    }
-                  }), param);
-    });
+function updateIn(valToUpdate, newVal, arr) {
+  return $$Array.map((function (curVal) {
+                var match = +(curVal === valToUpdate);
+                if (match !== 0) {
+                  return newVal;
+                } else {
+                  return curVal;
+                }
+              }), arr);
 }
 
 function make() {
@@ -30124,17 +30122,10 @@ function make() {
         var todoToToggle = action[0];
         return /* Update */Block.__(0, [/* record */[
                     /* newTodo */state[/* newTodo */0],
-                    /* todos */$$Array.map((function (curTodo) {
-                            var match = +(curTodo === todoToToggle);
-                            if (match !== 0) {
-                              return /* record */[
-                                      /* text */curTodo[/* text */0],
-                                      /* isChecked */1 - curTodo[/* isChecked */1]
-                                    ];
-                            } else {
-                              return curTodo;
-                            }
-                          }), state[/* todos */1])
+                    /* todos */updateIn(todoToToggle, /* record */[
+                          /* text */todoToToggle[/* text */0],
+                          /* isChecked */1 - todoToToggle[/* isChecked */1]
+                        ], state[/* todos */1])
                   ]]);
       } else {
         return /* Update */Block.__(0, [/* record */[
