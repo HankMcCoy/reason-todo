@@ -30062,6 +30062,7 @@ var Block                  = __webpack_require__(55);
 var Curry                  = __webpack_require__(17);
 var React                  = __webpack_require__(34);
 var Js_boolean             = __webpack_require__(208);
+var Pervasives             = __webpack_require__(196);
 var ReasonReact            = __webpack_require__(53);
 var TodoItem$ReactTemplate = __webpack_require__(207);
 
@@ -30072,7 +30073,7 @@ function str(prim) {
 var component = ReasonReact.reducerComponent("Page");
 
 function updateIn(valToUpdate, newVal, arr) {
-  return $$Array.map((function (curVal) {
+  return List.map((function (curVal) {
                 var match = +(curVal === valToUpdate);
                 if (match !== 0) {
                   return newVal;
@@ -30104,11 +30105,11 @@ function make() {
                           onClick: (function () {
                               return Curry._1(send, /* Add */0);
                             })
-                        }, "+")), React.createElement("div", undefined, $$Array.map((function (todo) {
-                            return ReasonReact.element(/* None */0, /* None */0, TodoItem$ReactTemplate.make(todo, (function () {
-                                              return Curry._1(send, /* Toggle */Block.__(1, [todo]));
-                                            }), /* array */[]));
-                          }), $$Array.of_list(List.filter((function (todo) {
+                        }, "+")), React.createElement("div", undefined, $$Array.of_list(List.map((function (todo) {
+                                return ReasonReact.element(/* None */0, /* None */0, TodoItem$ReactTemplate.make(todo, (function () {
+                                                  return Curry._1(send, /* Toggle */Block.__(1, [todo]));
+                                                }), /* array */[]));
+                              }), List.filter((function (todo) {
                                       switch (viewMode) {
                                         case 0 : 
                                             return /* true */1;
@@ -30118,7 +30119,7 @@ function make() {
                                             return 1 - todo[/* isChecked */1];
                                         
                                       }
-                                    }))($$Array.to_list(match[/* todos */2]))))), React.createElement("div", undefined, React.createElement("label", undefined, React.createElement("input", {
+                                    }))(match[/* todos */2])))), React.createElement("div", undefined, React.createElement("label", undefined, React.createElement("input", {
                               checked: Js_boolean.to_js_boolean(+(viewMode === /* All */0)),
                               name: "viewMode",
                               type: "radio",
@@ -30145,7 +30146,7 @@ function make() {
       return /* record */[
               /* newTodo */"",
               /* viewMode : All */0,
-              /* todos : array */[]
+              /* todos : [] */0
             ];
     });
   newrecord[/* reducer */12] = (function (action, state) {
@@ -30153,10 +30154,13 @@ function make() {
         return /* Update */Block.__(0, [/* record */[
                     /* newTodo */"",
                     /* viewMode */state[/* viewMode */1],
-                    /* todos */$$Array.append(/* array */[/* record */[
+                    /* todos */Pervasives.$at(/* :: */[
+                          /* record */[
                             /* text */state[/* newTodo */0],
                             /* isChecked : false */0
-                          ]], state[/* todos */2])
+                          ],
+                          /* [] */0
+                        ], state[/* todos */2])
                   ]]);
       } else {
         switch (action.tag | 0) {

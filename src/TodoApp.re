@@ -15,12 +15,12 @@ type action =
 type state = {
   newTodo: string,
   viewMode: viewMode,
-  todos: array(TodoItem.todo)
+  todos: list(TodoItem.todo)
 };
 
 let component = ReasonReact.reducerComponent("Page");
 
-let updateIn = (valToUpdate, newVal, arr) => Array.map(
+let updateIn = (valToUpdate, newVal, arr) => List.map(
   (curVal) => curVal === valToUpdate
     ? newVal
     : curVal,
@@ -32,7 +32,7 @@ let make = (_children) => {
   initialState: () => {
     newTodo: "",
     viewMode: All,
-    todos: [||]
+    todos: []
   },
   reducer: (action, state) =>
     switch action {
@@ -53,10 +53,7 @@ let make = (_children) => {
       ReasonReact.Update({
         ...state,
         newTodo: "",
-        todos: Array.append(
-          [|TodoItem.{ text: state.newTodo, isChecked: false }|],
-          state.todos
-        )
+        todos: [TodoItem.{ text: state.newTodo, isChecked: false }] @ state.todos
       })
     },
   render: ({send, state: {newTodo, todos, viewMode}}) =>
@@ -74,16 +71,16 @@ let make = (_children) => {
       </form>
       <div>
         (todos
-          |> Array.to_list
+          /* Filter to match the view mode */
           |> List.filter((todo: TodoItem.todo) =>
             switch (viewMode) {
             | All => true
             | Complete => todo.isChecked
             | Incomplete => ! todo.isChecked
             })
-          |> Array.of_list
-          |> Array.map((todo) =>
+          |> List.map((todo) =>
             <TodoItem todo handleToggle={_event => send(Toggle(todo))}/>)
+          |> Array.of_list
           |> ReasonReact.arrayToElement)
       </div>
       <div>
